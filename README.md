@@ -3,7 +3,7 @@
 [![Crates.io](https://img.shields.io/crates/v/file_env_const.svg?style=for-the-badge)](https://crates.io/crates/file_env_const)
 [![Documentation](https://img.shields.io/docsrs/file_env_const?style=for-the-badge)](https://docs.rs/file_env_const/)
 [![Build status](https://img.shields.io/github/actions/workflow/status/tveness/file_env_const/rust.yml?label=Tests&style=for-the-badge)](https://github.com/tveness/file_env_const/actions/workflows/rust.yml)
-[![License](https://img.shields.io/github/license/tveness/file_env_const?style=for-the-badge)](https://opensource.org/license/MIT/)
+[![License](https://img.shields.io/github/license/tveness/file_env_const?style=for-the-badge)](https://choosealicense.com/licenses/mit/)
 
 This crate provides macros for loading data at compile time from a file or environment
 variable, with fallback options.
