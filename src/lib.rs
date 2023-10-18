@@ -19,7 +19,7 @@
 //! const FALL_BACK_TO_ENV: &'static str = file_env!("file_does_not_exist", "CARGO_PKG_NAME");
 //! assert_eq!(FALL_BACK_TO_ENV, "file_env_const");
 //!
-//! // Tries to read data from file, falls back to environment variable which is the package name
+//! // Tries to read data from file, falls back to env variable, and then falls back to string
 //! const FALL_BACK_TO_DEFAULT: &'static str =
 //!     file_env!("file_does_not_exist", "ENV_NOT_FOUND", "fallback string");
 //! assert_eq!(FALL_BACK_TO_DEFAULT, "fallback string");
@@ -28,16 +28,16 @@
 //! ## Loading an environment variable, with file fallback
 //! ```
 //!# use file_env_const::env_file;
-//! // Read data from file first
+//! // Read data from environment variable first
 //! const ENV_DATA: &'static str = env_file!("CARGO_PKG_NAME", "Cargo.toml");
 //! assert_eq!(ENV_DATA, "file_env_const");
 //!
-//! // Tries to read data from file, falls back to environment variable which is the package name
+//! // Tries to read data from env variable, falls back to file which
 //! const FALL_BACK_TO_FILE: &'static str = env_file!("ENV_NOT_FOUND", "Cargo.toml");
 //! let f = std::fs::read_to_string("Cargo.toml").unwrap();
 //! assert_eq!(FALL_BACK_TO_FILE, f);
 //!
-//! // Tries to read data from file, falls back to environment variable which is the package name
+//! // Tries to read data from env variable, falls back to file, and then falls back to string
 //! const FALL_BACK_TO_DEFAULT: &'static str =
 //!     env_file!( "ENV_NOT_FOUND", "file_does_not_exist", "fallback string");
 //! assert_eq!(FALL_BACK_TO_DEFAULT, "fallback string");
@@ -57,6 +57,9 @@ enum Kind {
 
 /// Loads an environment variable, falling back to a file, falling back to a default value, all at
 /// compile time
+///
+/// The first argument is an environment variable, the second is a filename, and the third
+/// (optional) is a fallback string
 ///
 /// # Examples
 ///
@@ -104,8 +107,12 @@ pub fn env_file(input: TokenStream) -> TokenStream {
     }
 }
 
-/// Loads an environment variable, falling back to a file, falling back to a default value, all at
+/// Loads a file, falling back to an environment variable, falling back to a default value, all at
 /// compile time
+///
+/// The first argument is a filename, the second is an environment variable, and the third
+/// (optional) is a fallback string
+///
 /// # Examples
 ///
 /// ## Without fallback string
