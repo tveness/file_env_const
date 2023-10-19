@@ -1,6 +1,6 @@
 [package]
 name = "file_env_const"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "macros for loading data from files or environment variables at compile time"
 repository = "https://github.com/tveness/file_env_const"
@@ -13,6 +13,9 @@ proc-macro = true
 [dependencies]
 quote = "1.0.33"
 syn = "2.0.38"
+
+[features]
+log = []
 
 [package.metadata.docs.rs]
 rustdoc-args = ["--cfg", "docsrs"]

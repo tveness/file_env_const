@@ -87,15 +87,21 @@ pub fn env_file(input: TokenStream) -> TokenStream {
 
     match read_from_env(&mut l) {
         Kind::Data(data) => return data.into_token_stream().into(),
+        #[cfg(feature = "log")]
         Kind::Name(name) => eprintln!(
-            "No environment variable found with name {}, trying default",
+            "No environment variable found with name {}, trying file",
             name
         ),
+        #[cfg(not(feature = "log"))]
+        Kind::Name(_) => {}
     }
 
     match read_file(&mut l) {
         Kind::Data(data) => return data.into_token_stream().into(),
-        Kind::Name(name) => eprintln!("No file found at {}, trying environment variable", name),
+        #[cfg(feature = "log")]
+        Kind::Name(name) => eprintln!("No file found at {}, trying default", name),
+        #[cfg(not(feature = "log"))]
+        Kind::Name(_) => {}
     };
 
     if let Some(data) = l.next() {
@@ -140,15 +146,21 @@ pub fn file_env(input: TokenStream) -> TokenStream {
 
     match read_file(&mut l) {
         Kind::Data(data) => return data.into_token_stream().into(),
+        #[cfg(feature = "log")]
         Kind::Name(name) => eprintln!("No file found at {}, trying environment variable", name),
+        #[cfg(not(feature = "log"))]
+        Kind::Name(_) => {}
     };
 
     match read_from_env(&mut l) {
         Kind::Data(data) => return data.into_token_stream().into(),
+        #[cfg(feature = "log")]
         Kind::Name(name) => eprintln!(
             "No environment variable found with name {}, trying default",
             name
         ),
+        #[cfg(not(feature = "log"))]
+        Kind::Name(_) => {}
     }
 
     if let Some(data) = l.next() {
