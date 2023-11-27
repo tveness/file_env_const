@@ -43,6 +43,8 @@
 //! assert_eq!(FALL_BACK_TO_DEFAULT, "fallback string");
 //! ```
 
+use std::path::PathBuf;
+
 use proc_macro::TokenStream;
 use quote::ToTokens;
 use syn::parse::Parser;
@@ -177,11 +179,12 @@ where
     I: Iterator<Item = LitStr>,
 {
     if let Some(x) = parser_list.next() {
-        let filename = x.value();
+        let mut filename = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        filename.push(x.value());
         match std::fs::read_to_string(filename.clone()) {
             Ok(d) => Kind::Data(LitStr::new(&d, x.span())),
 
-            Err(_) => Kind::Name(filename),
+            Err(_) => Kind::Name(filename.to_string_lossy().to_string()),
         }
     } else {
         panic!("No filename argument supplied");
